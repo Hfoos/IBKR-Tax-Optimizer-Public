@@ -1,0 +1,22 @@
+# Personal financial data - never upload
+data/
+
+# Cached exchange rate data
+.rate_cache.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Claude Code internal files
+.claude/
+
+# Environment / secrets
+.env
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
