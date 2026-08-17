@@ -15,6 +15,8 @@ Output:
   - Tax summary: proceeds, gains, losses, net tax owed
 """
 
+import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -138,9 +140,41 @@ with st.sidebar:
 
 # ── Load CSV files ────────────────────────────────────────────────────────────
 
+def data_folder_path() -> Path:
+    target = _data_sub if _data_sub.exists() else _data_root
+    target.mkdir(parents=True, exist_ok=True)
+    return target
+
+
+def data_folder_url() -> str:
+    return data_folder_path().resolve().as_uri()
+
+
+def no_csv_message() -> str:
+    return (
+        "No CSV files found in the `data/` folder. Place your IBKR activity statements "
+        "here"
+    )
+
+
+def open_data_folder() -> None:
+    target = data_folder_path()
+    try:
+        if os.name == "nt":
+            os.startfile(str(target))
+        elif sys.platform == "darwin":
+            subprocess.Popen(["open", str(target)])
+        else:
+            subprocess.Popen(["xdg-open", str(target)])
+    except Exception:
+        pass
+
+
 csv_names = get_csv_filenames(DATA_FOLDER)
 if not csv_names:
-    st.error(f"No CSV files found in the `data/` folder. Place your IBKR activity statements there.")
+    st.markdown(no_csv_message())
+    if st.button("Open /data folder"):
+        open_data_folder()
     st.stop()
 
 with st.expander(f"Loaded {len(csv_names)} activity file(s)", expanded=False):

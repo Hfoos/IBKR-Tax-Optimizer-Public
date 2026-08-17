@@ -6,7 +6,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app import format_nis, format_qty, event_badge
+from app import format_nis, format_qty, event_badge, no_csv_message
 from src.tax_engine import EventType
 
 
@@ -38,3 +38,11 @@ def test_event_badge_zero():
     badge = event_badge(EventType.ZERO)
     assert "Zero event" in badge
     assert "⚪" in badge
+
+
+def test_no_csv_message_is_plain_text():
+    message = no_csv_message()
+    assert "Place your IBKR activity statements" in message
+    assert "here" in message
+    assert "[here]" not in message
+    assert "file:///" not in message
