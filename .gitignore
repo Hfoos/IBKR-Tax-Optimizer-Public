@@ -1,5 +1,7 @@
 # Personal financial data - never upload
-data/
+# Keep the folder in the repo, but ignore the actual CSV files users place locally.
+data/*
+!data/.gitkeep
 
 # Cached exchange rate data
 .rate_cache.json
